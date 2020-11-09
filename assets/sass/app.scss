@@ -1,0 +1,55 @@
+@import "./_reset";
+@import "./variables";
+@import "./mixins";
+@import "./lists";
+
+html {
+    font-size: 10px;
+}
+
+body {
+    color: $dirty-white;
+    background: $dark-grey;
+    background: linear-gradient(120deg, $grey, $dark-grey);
+    font-size: 1.6rem;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+header {
+    @include flexbox();
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    @include flexbox();
+    margin: 0 1.5rem;
+    transition: all .5s ease;
+}
+
+.column {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    height: 20vh;
+    position: relative;
+    background: transparent;
+    margin: 1rem;
+    padding: 1rem;
+
+    &--small {
+        flex: 0 0 33%;
+    }
+
+    &--medium {
+        flex: 0 0 50%;
+    }
+
+    &--large {
+        flex: 0 0 66%;
+    }
+}

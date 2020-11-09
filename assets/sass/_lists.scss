@@ -1,0 +1,16 @@
+.currency, .favourite {
+    border-radius: 0.5rem;
+    height: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    background: $dirty-white;
+}
+
+.currency {
+    max-width: 40rem;
+}
+
+.favourite {
+    background: $blue;
+    max-width: 80rem;
+}
