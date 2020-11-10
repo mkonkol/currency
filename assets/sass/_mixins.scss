@@ -4,3 +4,26 @@
     justify-content: center;
     min-height: 20vh;
 }
+
+@mixin buttonStyle ($bg-color: $grey, $color: $dirty-white) {
+    background-color: $bg-color;
+    color: $color;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+    transition: all .3s;
+
+    &:hover {
+        background-color: $dark-grey;
+        transition: all .3s;
+    }
+
+    // &:focus {
+
+    // }
+
+    // &:active {
+
+    // }
+}
