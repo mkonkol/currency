@@ -88,11 +88,12 @@ img {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: stretch;
+      -ms-flex-pack: stretch;
+          justify-content: stretch;
   -ms-grid-columns: (1fr)[5];
       grid-template-columns: repeat(5, 1fr);
+  text-align: center;
 }
 
 html {
@@ -191,5 +192,10 @@ h1 {
   background-color: #222831;
   -webkit-transition: all .3s;
   transition: all .3s;
+}
+
+.disabled {
+  -webkit-filter: grayscale(1);
+          filter: grayscale(1);
 }
 /*# sourceMappingURL=app.css.map */

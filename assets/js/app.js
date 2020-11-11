@@ -1,12 +1,12 @@
-// Variables
-const API = 'http://api.nbp.pl/api/exchangerates/tables/C';
-const CURRENCY = document.getElementsByClassName('currency')[0];
-const LIST = document.getElementsByClassName('favourite-list')[0];
+import { API, DIV_CURRENCY, LIST, LIST_NAME, CURRENCY_NAME, REMOVE_ALL } from "./variables.js";
+import { saveToLocalStorage, removeToLocalStorage, getLocalStorage } from "./localStorage.js";
+import { createFlags, addToList } from "./createElements.js";
 
 let currencyRates = [];
 
 // EventListeners
-CURRENCY.addEventListener('click', selectedFlag);
+DIV_CURRENCY.addEventListener('click', selectedFlag);
+REMOVE_ALL.addEventListener('click', removeAll);
 
 const fetchData = async url => {
     const response = await fetch(`${url}`);
@@ -19,161 +19,107 @@ const fetchData = async url => {
     return await response.json();
 }
 
-const getDate = () => new Date().getTime();
+export const getDate = () => new Date().getTime();
 
-const timeDifference = (currentDate, date) => {
+export const timeDifference = (date) => {
+    let currentDate = getDate();
     let difference = currentDate - date;
 
-    if (difference >= (6 * 60 * 60)) {
-        refreshData();
+    if (difference >= (6 * 60 * 60 * 1000)) {
+        return true
     }
+    return false;
 }
 
-const getlastData = () => currencyRates;
-const setLastData = data => currencyRates.push(data);
+// const getlastData = () => currencyRates;
+export const setLastData = data => currencyRates.push(data);
 
-const currencyData = async () => {
+export const currencyData = () => {
     fetchData(`${API}`)
         .then( response => {
+            // console.log(response);
             let items = response[0].rates;
             currencyRates = [];
-
-            items.map((item, idx) => {
-                if (idx === (items.length - 1)) return false;
-                setLastData(item);
-
-                const DIV = createTagElement({
-                    type: 'div',
-                    id: item.code,
-                    className: 'currency__field'
-                });
-
-                const IMG = createTagElement({
-                    type: 'img',
-                    className: 'currency__field__image',
-                    source: `./assets/images/${item.code}.png`
-                });
-                
-                const P = createTagElement({
-                    type: 'p',
-                    message: item.code
-                });
-                
-                DIV.appendChild(IMG);
-                DIV.appendChild(P);
-                CURRENCY.appendChild(DIV);
-            });
+            createFlags(items);
+            saveToLocalStorage(currencyRates, CURRENCY_NAME);
+            checkAndDisabledCurrency();
         })
         .catch( error => console.log(error.message));
 }
 
-const refreshData = async () => {
-    await currencyData();
-    // save to local storage    
+export const checkAndDisabledCurrency = () => {
+    if (LIST.children.length > 0) {
+        const CHILDREN = [...LIST.children];
+
+        CHILDREN.map(item => {
+            const LI = document.getElementById(item.id);
+            const PURCHASE = LI.getElementsByClassName('item__details--purchase')[0];
+            const SALE = LI.getElementsByClassName('item__details--sale')[0];
+            const ID = item.id.replace('favourite-', '');
+
+                if (currencyRates.length > 0) {
+                    currencyRates.filter(currency => {
+                        if (currency.code === ID) {
+                            PURCHASE.textContent = currency.bid.toFixed(2);
+                            SALE.textContent = currency.ask.toFixed(2);
+                        }
+                    });
+                }
+            (document.getElementById(ID)) && document.getElementById(ID).classList.add('disabled');
+        });
+    }
 }
 
-currencyData();
+export function deleteElement (e) {
+    const ITEM = e.target;
+    const FIELD = ITEM.parentElement.parentElement;
+    FIELD.remove();
 
-const createTagElement = ({ type, id, className, message, onClick, source }) => {
-    const ITEM = document.createElement(type);
-
-    if (id) ITEM.id = id;
-    if (className) ITEM.className = className;
-    if (message) ITEM.innerText = message;
-    if (onClick) ITEM.onclick = onClick;
-    if (source) ITEM.src = source;
-
-    return ITEM;
-}
-
-const addToList = data => {
-    if (data.length <= 0 ) return;
-
-    const LIST_LENGTH = LIST.children.length;
-    let i = (LIST_LENGTH > 0) ? (LIST_LENGTH + 1) : 1;
-
-    const LI = createTagElement({
-        type: 'li',
-        id: `favourite-${data[0].code}`,
-        className: `favourite-list__item`
-    });
-
-    const DIV = createTagElement({
-        type: 'div',
-        className: 'item__details'
-    });
-
-    data.map(item => {
-        const P1 = createTagElement({
-            type: 'p',
-            message: item.currency
-        });
-
-        const P2 = createTagElement({
-            type: 'p',
-            message: item.code
-        });
-
-        const P3 = createTagElement({
-            type: 'p',
-            message: item.bid.toFixed(2)
-        });
-
-        const P4 = createTagElement({
-            type: 'p',
-            message: item.ask.toFixed(2)
-        });
-
-        DIV.appendChild(P1);
-        DIV.appendChild(P2);
-        DIV.appendChild(P3);
-        DIV.appendChild(P4); 
-    });
-
-    const BUTTON = createTagElement({
-        type: 'button',
-        className: 'button button--trash',
-        onClick: deleteElement,
-        message: 'Remove'
-    });
-
-    DIV.appendChild(BUTTON);
-    LI.appendChild(DIV);
-    LIST.appendChild(LI);
-
-    // save to local storage
-}
-
-const deleteElement = e => {
-    const item = e.target;
-    const field = item.parentElement.parentElement;
-    field.remove();
-    const CODE = field.id.replace('favourite-', '');
+    const CODE = FIELD.id.replace('favourite-', '');
     const FLAG = document.getElementById(CODE);
     FLAG.classList.remove('disabled');
+    removeToLocalStorage(CODE, LIST_NAME);
 }
 
 const removeFromFavourites = code => {
     const CHILDREN = [...LIST.children];
-    const CHILD = CHILDREN.filter(item => item.id === `favourite-${code}`);
-    CHILD[0].remove();
+    CHILDREN.filter(item => { 
+        (item.id === `favourite-${code}`) && item.remove();
+    });
 }
 
 function selectedFlag (e) {
-    const item = e.target;
-    const field = item.parentElement;
+    const ITEM = e.target;
+    const FIELD = ITEM.parentElement;
 
-    if (!field.classList.contains('currency__field')) return;
+    if (!FIELD.classList.contains('currency__field')) return;
 
-    const chosenCurrency = currencyRates.filter(item => item.code === field.id);
-
-    if (!field.classList.contains('disabled')) {
-        field.classList.add('disabled');
-        // add to list
-        addToList(chosenCurrency);
-    } else {
-        field.classList.remove('disabled');
-        // remove from list
-        removeFromFavourites(chosenCurrency[0].code)
-    }
+    currencyRates
+        .filter(item => item.code === FIELD.id)
+        .map(currency => {
+            if (!FIELD.classList.contains('disabled')) {
+                FIELD.classList.add('disabled');
+                addToList(currency);
+                saveToLocalStorage(currency, LIST_NAME);
+            } else {
+                FIELD.classList.remove('disabled');
+                removeFromFavourites(currency.code);
+                removeToLocalStorage(currency.code, LIST_NAME);
+            }
+        });
 }
+
+function removeAll () {
+    while (LIST.firstChild) {
+        const CODE = LIST.firstChild.getElementsByClassName('item__details--code')[0].textContent;
+        removeToLocalStorage(CODE, LIST_NAME);
+        LIST.firstChild.remove();
+    }
+    const CHILDREN = [...DIV_CURRENCY.children];
+    CHILDREN.map(item => {
+        (item.classList.contains('disabled')) && item.classList.remove('disabled');
+    });
+}
+
+getLocalStorage(CURRENCY_NAME);
+getLocalStorage(LIST_NAME);

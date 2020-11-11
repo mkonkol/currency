@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="./assets/css/app.min.css">
 
-    <script src="./assets/js/app.js" defer></script>
+    <script src="./assets/js/app.js" type="module" defer></script>
 </head>
 <body>
     <header>
@@ -18,12 +18,16 @@
         <div class="container">
             <div class="column column--small">
                 <div class="currency">
-                    <h3>Dostępne waluty</h3>
+                    <h3>Available currencies</h3>
                 </div>
             </div>
             <div class="column column--large">
                 <div class="favourite">
+                    <div class="favourite__header"></div>
                     <ul class="favourite-list"></ul>
+                    <div class="favourite__footer">
+                        <button class="button button--remove-all">Remove all</button>
+                    </div>
                 </div>
             </div>
         </div>

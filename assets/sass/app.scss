@@ -58,3 +58,7 @@ h1 {
 .button {
     @include buttonStyle();
 }
+
+.disabled {
+    filter: grayscale(1);
+}
