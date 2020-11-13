@@ -11,6 +11,7 @@ body {
     color: $dirty-white;
     background: $dark-grey;
     background: linear-gradient(120deg, $grey, $dark-grey);
+    font-family: 'Poppins', sans-serif;
     font-size: 1.6rem;
     min-height: 100vh;
     position: relative;
@@ -30,6 +31,10 @@ h1 {
     align-items: flex-start;
     margin: 0 1.5rem;
     transition: all .5s ease;
+
+    @media (max-width: 992px) {
+        flex-wrap: wrap;
+    }
 }
 
 .column {
@@ -44,21 +49,49 @@ h1 {
 
     &--small {
         flex: 0 0 33%;
+
+        @media (max-width: 992px) {
+            flex: 0 0 100%;
+        }
     }
 
     &--medium {
         flex: 0 0 50%;
+        @media (max-width: 992px) {
+            flex: 0 0 100%;
+        }
     }
 
     &--large {
         flex: 0 0 66%;
+        @media (max-width: 992px) {
+            flex: 0 0 100%;
+        }
     }
 }
 
 .button {
     @include buttonStyle();
+
+    &--remove-all {
+        background: $dark-grey;
+        width: 100%;
+    }
+
+    &--refresh {
+        background: $blue;
+
+        &:hover {
+            background-color: darken($blue, 15%);
+            transition: all .3s;
+        }
+    }
 }
 
 .disabled {
     filter: grayscale(1);
+}
+
+.hidden {
+    display: none;
 }

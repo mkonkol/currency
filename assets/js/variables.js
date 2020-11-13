@@ -1,4 +1,7 @@
 export const API = 'http://api.nbp.pl/api/exchangerates/tables/C';
+export const INFO_EMPTY = document.getElementsByClassName('favourite--empty')[0];
+export const LAST_DATE = document.getElementsByClassName('info--last-update-date')[0].getElementsByTagName('span')[0];
+export const REFRESH_DATA = document.getElementsByClassName('button--refresh')[0];
 export const REMOVE_ALL = document.getElementsByClassName('button--remove-all')[0];
 export const DIV_CURRENCY = document.getElementsByClassName('currency')[0];
 export const LIST = document.getElementsByClassName('favourite-list')[0];

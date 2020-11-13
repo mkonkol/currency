@@ -1,58 +1,153 @@
-.currency, .favourite {
-    border-radius: 0.5rem;
-    // min-height: 100%;
+.currency, .favourite, .info {
+    @include basicProperty($color: $dark-grey, $bg-color: $dirty-white);
     min-height: 20vh;
-    margin: 0 auto;
-    padding: 1rem;
-    color: $dark-grey;
-    background: $dirty-white;
+    transition: ease all .5s;
+}
+
+.info {
+    margin-top: 1rem;
+    max-width: 40rem;
+    min-height: 10vh;
+    @include grid($justify: stretch);
+
+    @media (max-width: 992px) {
+        max-width: 80rem;
+        text-align: center;
+    }
+
+    @media (max-width: 480px) {
+        p {
+            padding: 0.5rem;
+
+            span {
+                display: block;
+            }
+        }
+    }
 }
 
 .currency {
+    @include grid($amount: 3, $gap: 0.5rem);
     max-width: 40rem;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0.5rem;
 
     h3 {
         grid-column: 1 / -1;
         // grid-column: span 2;
-        padding: 1rem;
+        text-align: center;
+        @include basicProperty($margin: null);
     }
 
     &__field {
         padding: 1rem;
         text-align: center;
         cursor: pointer;
+        transition: all .3s;
 
         &__image {
             width: 10rem;
             padding: 1rem;
             border-radius: 1.5rem;
+            transition: all .3s;
+
+            &:hover {
+                filter: drop-shadow(0 0 0.5rem $dark-grey);
+            }
         }
+    }
+
+    @media (max-width: 992px) {
+        grid-template-columns: repeat(auto-fill, 12rem);
+        max-width: 80rem;
+    }
+
+    @media (max-width: 576px) {
+        grid-template-columns: repeat(auto-fill, 10rem);
+        grid-gap: 0;    
     }
 }
 
 .favourite {
     background: $blue;
     max-width: 80rem;
+    min-height: 15vh;
+
+    &__header {
+        @include grid($amount: 5, $justify: stretch);
+        @include basicProperty($margin: 0.5rem);
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+
+        @media (max-width: 480px) {
+            justify-content: center;
+            grid-template-columns: repeat(auto-fill, 20rem);
+            padding: 0.5rem;
+
+            p {
+                padding: 0.5rem;
+                width: 100%;
+                
+                &:not(:last-child) {
+                    border-bottom: 0.1rem solid $grey;
+                }
+            }
+        }
+    }
+
+    &--empty {
+        position: relative;
+        background: transparent;
+        width: 100%;
+        height: 7rem;
+        margin: 0 auto;
+        font-style: italic;
+
+        span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
 
     .favourite-list {
         &__item {
-            background: $dirty-white;
-            padding: 1rem;
-            margin: 1rem 0.5rem;
-            border-radius: 0.5rem;
+            @include basicProperty($bg-color: $dirty-white, $margin: (1rem 0.5rem), $color: null);
+
+            &:nth-child(even) {
+                background: $light-grey;
+            }
     
             .item__details {
-                display: grid;
-                align-items: center;
-                justify-content: stretch;
-                grid-template-columns: repeat(5, 1fr);
+                @include grid($amount: 5, $justify: stretch);
                 text-align: center;
+
+                &--fullname {
+                    font-weight: 600;
+                    text-align: left;
+                    text-transform: capitalize;
+                }
+
+                &--purchase,
+                &--sale {
+                    font-weight: 600;
+                }
+
+                @media (max-width: 480px) {
+                    justify-content: center;
+                    grid-template-columns: repeat(auto-fill, 20rem);
+                    padding: 0.5rem;
+        
+                    p {
+                        padding: 0.5rem;
+                        text-align: center;
+                    }
+                }
             }
         }
+    }
+
+    &__footer {
+        padding: 0.5rem;
     }
 }

@@ -1,27 +1,41 @@
-import { CURRENCY_NAME } from "./variables.js";
+import { CURRENCY_NAME, LAST_DATE } from "./variables.js";
 import { addToList, createFlags } from "./createElements.js";
-import { currencyData, getDate, timeDifference, checkAndDisabledCurrency } from "./app.js";
+import { currencyData, getDate, timeDifference, checkAndDisabledCurrency, formatDate } from "./app.js";
 
+/**
+ * Checks for local data
+ * @param {string} name - key name
+ */
 function checkDataLocalStorage(name) {
     let items = null;
     items = (localStorage.getItem(name) === null) ? [] : JSON.parse(localStorage.getItem(name));
     return items;
 }
 
+/**
+ * Saves data in local memory
+ * @param {*} data
+ * @param {string} name - key name
+ */
 export const saveToLocalStorage = (data, name) => {
     let items = checkDataLocalStorage(name);
 
-    if (items.length > 1 && name === CURRENCY_NAME) {
-        items = [];
-    }
+    if (items.length > 1 && name === CURRENCY_NAME) items = [];
 
     items.push(data);
     if (name === CURRENCY_NAME) {
-        items.push(getDate());
+        const CURRENT_DATE = getDate();
+        items.push(CURRENT_DATE);
+        LAST_DATE.innerText = formatDate(CURRENT_DATE);
     }
     localStorage.setItem(name, JSON.stringify(items));
 }
 
+/**
+ * Deletes the given item from local storage
+ * @param {string} code - unique currency code
+ * @param {string} name - key name
+ */
 export const removeToLocalStorage = (code, name) => {
     let items = checkDataLocalStorage(name);
     items.filter((item, idx) => {
@@ -33,6 +47,10 @@ export const removeToLocalStorage = (code, name) => {
     localStorage.setItem(name, JSON.stringify(items));
 }
 
+/**
+ * Retrieves data from local memory or from the server
+ * @param {string} name - key name
+ */
 export const getLocalStorage = name => {
     let items = checkDataLocalStorage(name);
 
@@ -41,10 +59,12 @@ export const getLocalStorage = name => {
             currencyData();
             return;
         } else {
-            const TIME = timeDifference(items[1]);
+            const SAVE_TIME = items[1];
+            const TIME = timeDifference(SAVE_TIME);
             (TIME) 
                 ? currencyData()
                 : createFlags(items[0]);
+            LAST_DATE.innerText = formatDate(SAVE_TIME);
         }
     } else {
         items.map(item => addToList(item));

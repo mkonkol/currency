@@ -5,9 +5,18 @@
     min-height: 20vh;
 }
 
+@mixin grid ($amount: 1, $align: center, $justify: center, $gap: null) {
+    display: grid;
+    align-items: $align;
+    justify-content: $justify;
+    grid-template-columns: repeat($amount, 1fr);
+    grid-gap: $gap;
+}
+
 @mixin buttonStyle ($bg-color: $grey, $color: $dirty-white) {
     background-color: $bg-color;
     color: $color;
+    font-size: 1.4rem;
     border: none;
     border-radius: 0.5rem;
     padding: 1rem 0.5rem;
@@ -15,15 +24,15 @@
     transition: all .3s;
 
     &:hover {
-        background-color: $dark-grey;
+        background-color: darken($bg-color, 15%);
         transition: all .3s;
     }
+}
 
-    // &:focus {
-
-    // }
-
-    // &:active {
-
-    // }
+@mixin basicProperty ($color: $dirty-white, $bg-color: $dark-grey, $padding: 1rem, $margin: 0 auto, $radius: 0.5rem) {
+    color: $color;
+    background: $bg-color;
+    padding: $padding;
+    margin: $margin;
+    border-radius: $radius;
 }
