@@ -1,4 +1,4 @@
-export const API = 'http://api.nbp.pl/api/exchangerates/tables/C';
+export const API = 'https://api.nbp.pl/api/exchangerates/tables/C';
 export const INFO_EMPTY = document.getElementsByClassName('favourite--empty')[0];
 export const LAST_DATE = document.getElementsByClassName('info--last-update-date')[0].getElementsByTagName('span')[0];
 export const REFRESH_DATA = document.getElementsByClassName('button--refresh')[0];
