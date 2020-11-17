@@ -5,7 +5,7 @@ import { setLastData, deleteElement } from "./app.js";
  * Creates an HTML element
  * @param {object} param 
  */
-export const createTagElement = ({ type, id, className, message, onClick, source }) => {
+export const createTagElement = ({ type, id, className, message, onClick, source, draggable }) => {
     const ITEM = document.createElement(type);
 
     if (id) ITEM.id = id;
@@ -13,6 +13,7 @@ export const createTagElement = ({ type, id, className, message, onClick, source
     if (message) ITEM.innerText = message;
     if (onClick) ITEM.onclick = onClick;
     if (source) ITEM.src = source;
+    if (draggable) ITEM.setAttribute("draggable", true);
 
     return ITEM;
 }
@@ -69,7 +70,8 @@ export const addToList = item => {
     const LI = createTagElement({
         type: 'li',
         id: `favourite-${item.code}`,
-        className: `favourite-list__item`
+        className: `favourite-list__item`,
+        draggable: true
     });
 
     const DIV = createTagElement({

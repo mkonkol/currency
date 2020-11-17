@@ -113,6 +113,8 @@
     .favourite-list {
         &__item {
             @include basicProperty($bg-color: $dirty-white, $margin: (1rem 0.5rem), $color: null);
+            cursor: move;
+            transition: all .3s;
 
             &:nth-child(even) {
                 background: $light-grey;

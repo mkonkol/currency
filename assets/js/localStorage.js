@@ -71,3 +71,21 @@ export const getLocalStorage = name => {
         checkAndDisabledCurrency();
     }
 }
+
+export const updateAfterChangePosition = (name, favorites) => {
+    let items = checkDataLocalStorage(name);
+    
+    if (items.length > 0) {
+        localStorage.removeItem(`${name}`);
+    
+        favorites.map(favourite => {
+            let id = favourite.id.replace('favourite-', '');
+
+            items.forEach(item => {
+                if (item.code === id) {
+                    saveToLocalStorage(item, name);
+                }
+            });
+        });
+    }
+}

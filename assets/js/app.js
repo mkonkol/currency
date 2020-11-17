@@ -1,8 +1,10 @@
 import { API, DIV_CURRENCY, LIST, LIST_NAME, CURRENCY_NAME, REMOVE_ALL, INFO_EMPTY, REFRESH_DATA } from "./variables.js";
 import { saveToLocalStorage, removeToLocalStorage, getLocalStorage } from "./localStorage.js";
 import { createFlags, addToList } from "./createElements.js";
+import { activateDragNDrop } from "./dragDrop.js";
 
 let currencyRates = [];
+let elementList = null;
 
 /**
  * Connects to the API
@@ -131,6 +133,7 @@ const removeFromFavourites = code => {
     CHILDREN.filter(item => { 
         (item.id === `favourite-${code}`) && item.remove();
     });
+    elementList = document.querySelectorAll('.favourite-list__item');
 }
 
 /**
@@ -173,6 +176,8 @@ function selectedFlag (e) {
                 removeToLocalStorage(currency.code, LIST_NAME);
                 isEmptyFavoritesList();
             }
+            elementList = document.querySelectorAll('.favourite-list__item');
+            activateDragNDrop(elementList);
         });
 }
 
@@ -184,3 +189,8 @@ REFRESH_DATA.addEventListener('click', currencyData);
 // init()
 getLocalStorage(CURRENCY_NAME);
 getLocalStorage(LIST_NAME);
+
+if (LIST.children.length > 0) {
+    elementList = document.querySelectorAll('.favourite-list__item');
+    activateDragNDrop(elementList);
+}

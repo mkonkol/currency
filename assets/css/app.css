@@ -202,6 +202,9 @@ img {
   padding: 1rem;
   margin: 1rem 0.5rem;
   border-radius: 0.5rem;
+  cursor: move;
+  -webkit-transition: all .3s;
+  transition: all .3s;
 }
 
 .favourite .favourite-list__item:nth-child(even) {
@@ -404,5 +407,16 @@ h1 {
 
 .hidden {
   display: none;
+}
+
+[draggable] {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.dragging {
+  opacity: .5;
 }
 /*# sourceMappingURL=app.css.map */
